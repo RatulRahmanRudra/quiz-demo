@@ -1,0 +1,38 @@
+#home-container {
+  margin: 10% auto auto auto;
+  padding: 10px;
+  color: white;
+}
+
+.input-field {
+  margin: auto;
+  padding: 30px;
+  width: 40%;
+  background-color: #801336;
+  border: 0.5px solid;
+  box-shadow: 5px 10px #51013273;
+}
+
+.input-field > .name,
+.category {
+  padding: 5px;
+}
+
+.start-button {
+  display: flex;
+  width: 10%;
+  text-decoration: none;
+  padding: 10px;
+  border: 0.5px solid;
+  margin: 5% auto auto auto;
+  color: white;
+}
+
+.start-button:hover {
+  background-color: #801336;
+  color: white;
+}
+
+html {
+  background-image: url("http://theblacktank.com/wp-content/uploads/2014/02/pink-bg.jpg");
+}

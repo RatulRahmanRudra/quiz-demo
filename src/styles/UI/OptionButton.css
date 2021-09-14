@@ -1,0 +1,22 @@
+.option-container,
+.correct,
+.incorrect {
+  background-color: #2d142c;
+  border-radius: 5px;
+  padding: 1px;
+  width: 40%;
+  margin: 5px auto auto auto;
+  color: white;
+}
+.option-container:hover {
+  background-color: #382137;
+  cursor: pointer;
+}
+
+.correct {
+  background-color: green;
+}
+
+.incorrect {
+  background-color: red;
+}
