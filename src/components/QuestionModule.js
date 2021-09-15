@@ -16,7 +16,7 @@ const QuestionModule = ( {quizData} ) => {
       <h3 className="quiz-number">{id+1}/10</h3>
       <h2>Q. {ques} </h2>
       <div className="options">
-        { 
+        { options &&
           options.map( (option) => 
             <OptionButton 
               option={option} 

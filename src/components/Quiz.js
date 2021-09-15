@@ -35,7 +35,7 @@ const Quiz = () =>{
   const quizData = [];
   
   if(fetchedData){
-    fetchedData.forEach((data, i) => {
+    fetchedData.forEach(async (data, i) => {
       const quizObj = {
         id: i,
         ques: data.question,
@@ -45,29 +45,20 @@ const Quiz = () =>{
 
       quizObj.options.sort( () => Math.random() - 0.5 );
 
-      // if(quizObj.option){
-        // 
-      // }
 
-
-      quizData.push(quizObj);
+      await quizData.push(quizObj);
 
     });
   }
 
-    console.log(quizData)
+    // console.log(quizData[0].ques);
   
 
   return (
     <div>
 
       {isLoading && <Loading/>}
-      {!isLoading &&
-       quizData.map(
-         (quiz) => <QuestionModule quizData={quiz} key={quiz}/>
-         
-       )
-     }
+      {!isLoading && quizData && <QuestionModule quizData={quizData[1]} />}
     </div>
   )
 }
