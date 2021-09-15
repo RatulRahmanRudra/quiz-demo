@@ -12,7 +12,7 @@ const Quiz = () =>{
 
   const [fetchedData, setFetchedData] = useState(null);
  
-  
+
   useEffect(() => {
 
     const apiQuiz = async () => {
@@ -20,7 +20,7 @@ const Quiz = () =>{
       console.log("get request");
       try {
         const res = await FetchQuiz.getQuiz()
-        const result = res.data.results;
+        const result = await res.data.results;
         await setFetchedData(result)
       } catch (error) {
         console.log(error);
@@ -51,14 +51,14 @@ const Quiz = () =>{
     });
   }
 
-    // console.log(quizData[0].ques);
-  
+    console.log(quizData[0]);
+    
 
   return (
     <div>
 
       {isLoading && <Loading/>}
-      {!isLoading && quizData && <QuestionModule quizData={quizData[1]} />}
+      {!isLoading && <QuestionModule quizData={quizData[0]} />}
     </div>
   )
 }

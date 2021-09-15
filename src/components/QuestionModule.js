@@ -3,31 +3,33 @@ import '../styles/components/QuestionModule.css';
 import OptionButton from '../UI/OptionButton';
 
 const QuestionModule = ( {quizData} ) => {
-  const {ques, options, id, ans} = quizData;
-  // console.log(ques, options);
-
+  // const {ques, options, id, ans} = quizData;
+  if(quizData)console.log('quesModule', quizData);
+  // console.log(ques, options, id, ans);
 
 
     
 
 
-    return (
+  return (
+    // <h1>ques</h1>
+    
       <div id="quiz-container">
-      <h3 className="quiz-number">{id+1}/10</h3>
-      <h2>Q. {ques} </h2>
-      <div className="options">
-        { options &&
-          options.map( (option) => 
+      { quizData && <h3 className="quiz-number">{quizData.id+1}/10</h3> }
+      { quizData && <h2>Q. {quizData.ques} </h2> }
+      { quizData && <div className="options"> 
+        { 
+          quizData.options.map( (option) => 
             <OptionButton 
               option={option} 
-              ans={ans}
+              ans={quizData.ans}
               key={option} 
             />
           )
         }
-      </div>
+      </div>}
     </div>
   )
-
-    }
+}
+    
 export default QuestionModule;
