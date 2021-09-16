@@ -1,9 +1,10 @@
-import api from "../API";
+import axios from 'axios';
 
 class FetchQuiz{
-  getQuiz = (url) => api.get(url);
-
-  getQuiz = () => api.get();
+  getQuiz = (cat, diff) => {
+    const url = `https://opentdb.com/api.php?amount=10&type=multiple&category=${cat}&difficulty=${diff}`;
+    return axios.get(url);
+  }
 }
 
 

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-onchange */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import '../styles/components/Home.css';
 
 const Home = () => {
@@ -14,29 +15,43 @@ const Home = () => {
 
   ]
 
+  const history = useHistory();
    
   const [category, setCategory] = useState('')
-  const [name, setName] = useState('');
-  const [diff, setDiff] = useState('');
+  const [userName, setUserName] = useState('');
+  const [diff, setDiff] = useState('easy');
   
-  
+  const handleSubmit = () => {
+    console.log('started');
+    if(!userName){
+      alert("please enter your name");
+      return;
+    }
+    history.push({  
+      pathname:"/quiz",
+      state:{
+        userName,
+        category,
+        diff
+      }
+    })
+  }
   
 
   return ( 
     <div id="home-container">
       
-      <h1>Welcome to WINIT</h1>
-      
+      <h1>Welcome to DUMMY QUIZ</h1>
       <form className="input-field">
         
         <section className="name">
           <label htmlFor="name">Your Name: <input 
             type="text"
             id="name"
-            value={name}
+            value={userName}
             onChange={
               (e) => {
-                setName(e.target.value);
+                setUserName(e.target.value);
               }
             }
             required
@@ -87,13 +102,16 @@ const Home = () => {
             </select>
           </label>
         </section>
+        
+        <button
+          type="button"
+          className = "start-button"
+          onClick={() => handleSubmit()}
+        >
+          start
+        </button>
 
       </form>
-      <Link 
-        to="/quiz"
-        className="start-button"
-
-      >Start</Link>
     </div>
   );
 
