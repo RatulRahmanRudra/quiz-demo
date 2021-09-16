@@ -28,7 +28,6 @@ const Quiz = () =>{
       setIsLoading(true);
       console.log("get request");
       const {diff, category} = {...history.location.state};
-      console.log(category, diff);
       try {
         // const url = `https://opentdb.com/api.php?amount=10&type=multiple&category=${category}&difficulty=${diff}`
         
@@ -85,7 +84,7 @@ const Quiz = () =>{
     setResult(option===ans);
   }
   
-  console.log(fetchedData);
+  // console.log(fetchedData);
 
 
   return (
