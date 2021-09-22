@@ -24,6 +24,7 @@ const Home = () => {
   const handleSubmit = () => {
     console.log('started');
     if(!userName){
+      // eslint-disable-next-line no-alert
       alert("please enter your name");
       return;
     }

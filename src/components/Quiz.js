@@ -1,66 +1,120 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useHistory } from "react-router";
 import FetchQuiz from "../API/services/FetchData";
 import Loading from "../UI/Loading";
 import ResultModal from "../UI/ResultModal";
 import QuestionModule from "./QuestionModule";
 
+
+const initialState = {
+  isLoading: true,
+  fetchedData: null,
+  quizData: []
+}
+
+const quizReducer = (quizState, quizAction) => {
+  switch (quizAction.type){
+    case "FETCH_SUCCESS" :
+      return {
+        isLoading: false,
+        fetchedData: quizAction.payload
+      }
+    
+    case "FETCH_ERROR":
+      return {
+        isLoading: false,
+        fetchedData: null,
+        error: quizAction.payload
+      }
+    
+    case "ASSIGN_QUIZDATA" :
+      return {
+        ...quizState, quizData: quizAction.payload
+      }
+
+    default :
+      return quizState
+  }
+}
+
 const Quiz = () =>{
   
   console.log('quiz');
 
   const history = useHistory();
-  const userInputs = {...history.location.state};
-  // console.log(userInputs)
+  const {diff, category} = history.location.state;
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [fetchedData, setFetchedData] = useState(null);
-  const [current, setCurrect] = useState(0);
+  // const [isLoading, setIsLoading] = useState(true); 
+  // const [fetchedData, setFetchedData] = useState(null);
+  const [current, setCurrent] = useState(0);
   const [points, setPoints] = useState(0);
   const [timeOut, setTimeOut] = useState(false);
+  const [quizData, setQuizData] = useState([]);
 
- 
+  const [quizState, quizDispatch] = useReducer(quizReducer, initialState);
 
   useEffect(() => {
     
     const apiQuiz = async () => {
-      setIsLoading(true);
       console.log("get request");
-      const {diff, category} = {...history.location.state};
-      try {
-        // const url = `https://opentdb.com/api.php?amount=10&type=multiple&category=${category}&difficulty=${diff}`
-        
+      try {        
         const res = await FetchQuiz.getQuiz(category, diff);
         const result = await res.data.results;
-        await setFetchedData(result)
+        // await setFetchedData(result)
+        quizDispatch({
+            type: "FETCH_SUCCESS",
+            payload: result
+        })
       } catch (error) {
         console.log(error);
+        quizDispatch({
+          type: "FETCH_ERROR",
+          payload: error
+        })
       }
-      setIsLoading(false);
+      // setIsLoading(false);
     }
     apiQuiz();
 
-  }, [history.location.state])
+  }, [diff, category])
 
 
-  const quizData = [];
+  // using state is better
+  // const quizData = [];
+
+
+  //  state from useReducer 
+  const {fetchedData, isLoading} = quizState; 
+
+  useEffect(() => {       // used for shuffeling the quiz options
+    if(fetchedData){
+      const qData = [];
+      fetchedData.forEach(async (data, i) => {
+        const quizObj = {
+          id: i,
+          ques: data.question,
+          ans: data.correct_answer,
+          options: [...data.incorrect_answers, data.correct_answer]
+        }
   
-  if(fetchedData){
-    fetchedData.forEach(async (data, i) => {
-      const quizObj = {
-        id: i,
-        ques: data.question,
-        ans: data.correct_answer,
-        options: [...data.incorrect_answers, data.correct_answer]
-      }
+        quizObj.options.sort( () => Math.random() - 0.5 ); // shuffeling the options
+  
+        await qData.push(quizObj);
+  
+      });
+      setQuizData(qData);
 
-      quizObj.options.sort( () => Math.random() - 0.5 ); // shuffeling the options
+      /// having problem to set quizdata using reducer.
 
-      await quizData.push(quizObj);
+      // quizDispatch({
+      //   type: "ASSIGN_QUIZDATA",
+      //   payload: qData
+      // });
+    }
 
-    });
-  }
+
+  }, [fetchedData])
 
   
   const [clicked, setClicked] = useState(false);
@@ -75,7 +129,7 @@ const Quiz = () =>{
   }
 
   const nextQuiz = () =>{
-    setCurrect(current+1)
+    setCurrent(current+1)
   }
 
   const handleClick = (option, ans) => {
@@ -101,9 +155,6 @@ const Quiz = () =>{
           toggleModal={toggleModal}
           result={result}
           ans={quizData[current].ans} 
-          userName={userInputs.userName} 
-          score={points}
-          timeOut={timeOut}
           // msg="Test message"
         />
       }
