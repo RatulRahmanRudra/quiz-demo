@@ -30,7 +30,7 @@ const quizReducer = (quizState, quizAction) => {
     
     case "ASSIGN_QUIZDATA" :
       return {
-        ...quizState, quizData: quizAction.payload
+        quizData: quizAction.payload
       }
 
     default :
@@ -50,7 +50,7 @@ const Quiz = () =>{
   const [current, setCurrent] = useState(0);
   const [points, setPoints] = useState(0);
   const [timeOut, setTimeOut] = useState(false);
-  const [quizData, setQuizData] = useState([]);
+  // const [quizData, setQuizData] = useState([]);
 
   const [quizState, quizDispatch] = useReducer(quizReducer, initialState);
 
@@ -85,7 +85,7 @@ const Quiz = () =>{
 
 
   //  state from useReducer 
-  const {fetchedData, isLoading} = quizState; 
+  const {fetchedData, isLoading, quizData} = quizState; 
 
   useEffect(() => {       // used for shuffeling the quiz options
     if(fetchedData){
@@ -103,14 +103,14 @@ const Quiz = () =>{
         await qData.push(quizObj);
   
       });
-      setQuizData(qData);
+      // setQuizData(qData);
 
       /// having problem to set quizdata using reducer.
 
-      // quizDispatch({
-      //   type: "ASSIGN_QUIZDATA",
-      //   payload: qData
-      // });
+      quizDispatch({
+        type: "ASSIGN_QUIZDATA",
+        payload: qData
+      });
     }
 
 
@@ -160,7 +160,7 @@ const Quiz = () =>{
       }
       {!isLoading && 
         < QuestionModule 
-          quizData={quizData[current]} 
+          quizData={quizData && quizData[current]} 
           handleClick={handleClick} 
           nextQuiz={nextQuiz}
           time={100}      
